@@ -3,14 +3,18 @@
 	import Recipe from './Recipe.svelte';
 	import RecipeFlag from './RecipeFlag.svelte';
 	import {mockRecipes, mockCommand} from './mock.js';
+
 	export let name;
 	export let value = '';
 	export let chips = [];
+
 	const recipes = mockRecipes;
 	const command = mockCommand;
 	let currentRecipe = command.recipes[0];
 	let flagValues = command.inputs.flags.map(flag => '');
 	let argValues = command.inputs.args.map(arg => '');
+	const appStates = { search: 'search', recipe: 'recipe'};
+	let currentAppState = appStates.search;
 
 	$: parsedArgValues = argValues.join(' ');
 	$: parsedFlags =  command.inputs.flags.map((flag,i) => {
@@ -26,6 +30,7 @@
 		}
 		return '';
 	}).join(' ');
+
 	const handleKeyUp = (event) => {
 		console.log(event.key);
 		if (value.trim() === '' && event.key !== 'Backspace') return;
@@ -38,45 +43,66 @@
 		} else if (event.key === 'Backspace' && value.length === 0) {
 			chips = chips.slice(0, chips.length - 2);
 		}
-	}
+	};
+
+	const handleRecipeSelected = (index) => {
+		if(index < 0) return;
+		currentAppState = appStates.recipe;
+		currentRecipe = recipes[index];
+	};
+	const handleBack = () => {
+		currentAppState = appStates.search;
+		currentRecipe = null;
+	};
+
 </script>
 
 <main>
-	<div class="search-bar">
-		🔍
-		<span class="chip-holder">
-			{#each chips as chip, i}
-				<Chip chip={chip}/>
-			{/each}
-		</span>
+	{#if currentAppState === appStates.search}
+		<div class="search-bar">
+			🔍
+			<span class="chip-holder">
+				{#each chips as chip, i}
+					<Chip chip={chip}/>
+				{/each}
+			</span>
 
-		<input bind:value={value} on:keyup={handleKeyUp}>
-	</div>
-	{#each recipes as {description, link, stars}, i}
-		<Recipe
-				link={link}
-				stars={stars}
-				description={description}
-		/>
-	{/each}
-	<div class="command">
-		<h2>Recipe: {currentRecipe.description}</h2>
-		<h2>Command: {command.description}</h2>
-		<div>
-			<h2>Args</h2>
-			{#each command.inputs.args as arg, i}
-				<RecipeFlag flag={arg} bind:value={argValues[i]} />
-			{/each}
+			<input bind:value={value} on:keyup={handleKeyUp}>
 		</div>
-		<div>
-			<h2>Flags</h2>
-			{#each command.inputs.flags as flag, i}
-				<RecipeFlag flag={flag} bind:value={flagValues[i]}/>
-			{/each}
-		</div>
-	</div>
-	<div class="command-prompt">{command.resolution.bin} {parsedArgValues} {parsedFlags}</div>
+		{#each recipes as {description, link, stars}, i}
+			<Recipe
+					link={link}
+					stars={stars}
+					description={description}
+					index={i}
+					handleRecipeSelected="{handleRecipeSelected}"
+			/>
+		{/each}
+	{/if}
+	{#if currentAppState === appStates.recipe}
+		<div class="command">
+			<h2>Recipe: {currentRecipe.description}</h2>
+			<h2>Command: {command.description}</h2>
+			<div>
+				<h2>Args</h2>
+				{#each command.inputs.args as arg, i}
+					<RecipeFlag flag={arg} bind:value={argValues[i]} />
+				{/each}
+			</div>
+			<div>
+				<h2>Flags</h2>
+				{#each command.inputs.flags as flag, i}
+					<RecipeFlag flag={flag} bind:value={flagValues[i]}/>
+				{/each}
+			</div>
+			<div class="button-container">
+				<button on:click={handleBack}>Back</button>
+			</div>
 
+		</div>
+
+		<div class="command-prompt">{command.resolution.bin} {parsedArgValues} {parsedFlags}</div>
+	{/if}
 </main>
 
 <style>
@@ -120,12 +146,34 @@
 		padding: 20px;
 		border: 10px solid white;
 	}
+	button {
+		background-color: #4CAF50; /* Green */
+		border: none;
+		color: white;
+		padding: 15px 32px;
+		text-align: center;
+		text-decoration: none;
+		display: inline-block;
+		font-size: 16px;
+		cursor: pointer;
+	}
+
+	button:active {
+		background-color: green; /* Green */
+	}
+
+	.button-container {
+		display: flex;
+		justify-content: flex-end;
+		padding-right: 10px;
+	}
 
 	@media (min-width: 640px) {
 		main {
 			max-width: none;
 		}
 	}
+
 
 
 </style>

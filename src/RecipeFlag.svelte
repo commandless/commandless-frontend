@@ -26,8 +26,8 @@
                     <option value="false">false</option>
                     <option value="true">true</option>
                 </select>
-            {:else if type === 'number'}
-                <div><strong>value:</strong><input  pattern="[0-9]+.*[0-9]*" bind:value={value}></div>
+<!--            {:else if type === 'number'}-->
+<!--                <div><strong>value:</strong><input  type=number bind:value={value}></div>-->
             {:else}
                 <div><strong>value:</strong><input bind:value={value}></div>
             {/if}

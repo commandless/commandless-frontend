@@ -2,6 +2,8 @@
     export let link='';
     export let stars='';
     export let description='';
+    export let index = -1;
+    export let handleRecipeSelected = () => true;
 </script>
 
 <div class="recipe" >
@@ -10,7 +12,7 @@
         <span>⭑{stars}</span>
     </div>
     <div>{description}</div>
-    <button>Use</button>
+    <button on:click={handleRecipeSelected(index)}>Use</button>
 </div>
 
 <style>

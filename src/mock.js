@@ -47,7 +47,7 @@ export const mockCommand = {
                 description: "Template name",
                 short: null, // single-hyphen flag (for example: -f)
                 long: "template", // double-hyphen flag (for example: --flag)
-                type: "number",
+                type: "string",
                 isRequired: false,
                 defaultValue: null, // omit by default
             },
