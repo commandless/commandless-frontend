@@ -1,13 +1,14 @@
 export const mockRecipes = [
     {
-        description: 'Check out the Webpack template and the Rollup template for examples.\n' +
+        description: 'Create React apps with no build configuration.\n' +
             '\n' +
-            'To bundle this in your own code, use a Sass processor (not a Sass Svelte preprocessor, but a Sass processor). SMUI index.js files import Sass files, and they need to be compiled by a processor. The *.svelte files don\'t include any Sass or CSS, so a Svelte preprocessor is not necessary.\n' +
-            'Alternatively, you can import from the bare.js files, which doesn\'t include any styling. Then you can either import the Sass yourself, or use the bare.css files which are precompiled and packaged with the default theme.\n' +
-            'You must have a _smui-theme.scss file in one of your Sass include paths to compile the Sass. That is where you set the MDC theme variables. If it\'s empty, it will use the default theme values from MDC. See the theme file in the demo site for an example that uses Svelte colors.\n' +
-            'If you want the Material Icon, Roboto, and Roboto Mono fonts, be sure to include these (or include them from a package):',
-        link: 'https://github.com/hperrin/svelte-material-ui',
-        stars: 620,
+            'Creating an App – How to create a new app.\n' +
+            'User Guide – How to develop apps bootstrapped with Create React App.\n' +
+            'Create React App works on macOS, Windows, and Linux.\n' +
+            'If something doesn’t work, please file an issue.\n' +
+            'If you have questions or need help, please ask in our Spectrum community.',
+        link: 'https://github.com/facebook/create-react-app',
+        stars: 76000,
     },
     {
         description: 'Svelte is a new way to build web applications. It\'s a compiler that takes your declarative components and converts them into efficient JavaScript that surgically updates the DOM.\n' +
@@ -20,7 +21,7 @@ export const mockRecipes = [
 
 export const mockCommand = {
     description: 'description',
-    resolution: {
+    command: {
         bin: "create-react-app",
         npm: "create-react-app",
         github: "facebook/create-react-app",

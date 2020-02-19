@@ -3,15 +3,22 @@
 	import Recipe from './Recipe.svelte';
 	import RecipeFlag from './RecipeFlag.svelte';
 	import {mockRecipes, mockCommand} from './mock.js';
+	import * as service from './service';
 
 	export let name;
 	export let value = '';
 	export let chips = [];
 
-	const recipes = mockRecipes;
+	let recipes = []; //= mockRecipes;
 	const command = mockCommand;
 	let currentRecipe = command.recipes[0];
-	let flagValues = command.inputs.flags.map(flag => '');
+	let flagValues = command.inputs.flags.map(flag =>{
+		return '';
+		/*if (!currentRecipe || !currentRecipe.inputs || !currentRecipe.inputs.flags) return;
+		const foundFlag = currentRecipe.inputs.flags.find(other => flag.description === other.description );
+		if (!foundFlag) return '';
+		return foundFlag.value;*/
+	} );
 	let argValues = command.inputs.args.map(arg => '');
 	const appStates = { search: 'search', recipe: 'recipe'};
 	let currentAppState = appStates.search;
@@ -37,6 +44,14 @@
 		if (event.key === 'Enter') {
 			chips = [...chips, ...value.split(' ').map(val => val.trim())];
 			value = '';
+			// recipes = mockRecipes;
+			service.getRecipes(chips)
+			.then((result) => {
+				recipes = result;
+			})
+			.catch( () => {
+				recipes = mockRecipes;
+			});
 		} else if (event.key === ' ' && value !== ' ') {
 			chips = [...chips, value.trim()];
 			value = '';
@@ -101,7 +116,7 @@
 
 		</div>
 
-		<div class="command-prompt">{command.resolution.bin} {parsedArgValues} {parsedFlags}</div>
+		<div class="command-prompt">{command.command.bin} {parsedArgValues} {parsedFlags}</div>
 	{/if}
 </main>
 
